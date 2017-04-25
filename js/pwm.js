@@ -119,6 +119,5 @@ function simStep(i){
 		i=0;
 	sim = document.getElementById('sim');
 	sim.style.backgroundColor = lut[i]
-	console.log(lut[i])
 	setTimeout(function(){simStep(i+1)}, time/steps*1000);
 }
