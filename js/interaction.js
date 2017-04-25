@@ -45,7 +45,6 @@ function handleInteraction(cvs, draw) {
         if(Math.abs(mx-p.x)<10 && Math.abs(my-p.y)<10) {
           moving = true;
           mp = p;
-          console.log("point", mp)
           cx = p.x;
           cy = p.y;
         }

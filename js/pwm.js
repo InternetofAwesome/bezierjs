@@ -1,19 +1,5 @@
-var canvas;
 var frameCount;
-var lines = [];
-var bits = 8
 var lut=[]
-
-// function setCurve(c, cvs){
-// 	curve=c;
-// 	canvas=cvs
-// 	canvas.ondblclick = canvas_double_click;
-// 	// canvas.addEventListener('resize', canvas_resize)
-// 	// canvas.onresize = canvas_resize;
-// 	window.addEventListener('resize', window_resize)
-// 	document.addEventListener('load', window_resize)
-// 	console.log('set curve')
-// }
 
 function window_resize(arg){
 	var new_width = window.innerWidth/2;
