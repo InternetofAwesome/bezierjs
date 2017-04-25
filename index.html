@@ -4,6 +4,12 @@
     <meta charset="utf-8">
     <title>PWM calculator</title>
     <link rel="stylesheet" href="style.css">
+    <script src="js/draw.js"></script>
+    <script src="js/interaction.js"></script>
+    <script src="js/loader.js"></script>
+    <script src="./js/pwm.js"></script>
+    <script src="./js/linegroup.js"></script>
+    <script src="./bezier.js"></script>
   </head>
   <body>
     <header>
@@ -12,16 +18,18 @@
     <table>
       <tr>
         <td>
-          <figure><script type="text/beziercode">
-            new Bezier(0,document.body.clientHeight/2 ,5,10, 20,20 , document.body.clientWidth/2,0);
-            var draw = function() {
-              drawSkeleton(curve);
-              drawCurve(curve);
-              getValues(document.getElementById("output"))
-
+          <canvas id=cvs width=500 height=500 bgcolor="black" style="border: 1px solid black"></canvas>
+          <figure><script>
+            var c, lg, draw
+            document.body.onload = function(){
+              c = new Bezier(0,0, 100,100, 200,100, 300,300)
+              lg = new LineGroup(c);
+              draw = new Draw(document.getElementById('cvs'))
+              draw.drawSkeleton(lg)
+              draw.drawCurve(lg)
+              handleInteraction(document.getElementById('cvs'), draw)
+              simStep(0)
             }
-            setCurve(curve, getCanvas())
-            window_resize()
           </script>
           </figure>
         </td>
@@ -32,7 +40,7 @@
               <text>Number of Values</text>
               </td>
               <td>
-                <input id=points type=number value=100 oninput="this.value=updateFrameCount(this.value)">
+                <input id=points type=number value=32>
               </td>
             </tr>
             <tr>
@@ -40,19 +48,21 @@
                 <text>Animation Time</text>
               </td>
                 <td>
-                  <input id=time type=number value=1.2 oninput="this.value=updateFrameCount(this.value)"><text>s</text>
+                  <input id=time type=number value=1.2><text>s</text>
                 </td>
               </tr>
+              <tr>
+                <td>
+                  <text>PWM Resolution</text>
+              </td>
+              <td>
+                <input id="pwmres" value="8"><text>bits</text>
+              </td>
             </table>
-          <div class=container style="background-color: #ff0000; height:50px; width:50px;"></div>
+          <div class=container id="sim" style="background-color: #ff0000; height:50px; width:50px;"></div>
         </td>
       </tr>
     </table>  
-    <font face=monospace size=2><p id="output">nothing</p></font>
-    <script src="./js/pwm.js"></script>
-    <script src="./bezier.js"></script>
-    <script src="js/draw.js"></script>
-    <script src="js/interaction.js"></script>
-    <script src="js/loader.js"></script>
+    <font face=monospace size=2><p style="word-wrap: break-word; width: 100%" id="output">nothing</p></font>
   </body>
 </html>
