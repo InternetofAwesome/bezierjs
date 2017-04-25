@@ -80,15 +80,13 @@ function updateLUT(lg){
 	    //get the y value and normalize it by canvas height
 	    var h = (cvs.height-c.get(tp).y)/cvs.height;
 
-	    tlut.push(h);
-
 	    //convert desired intensity to PWM duty cycle
 	    h = intensity_to_power(h, max_val);
 	    h = Math.round(h);
 
 	    lutPoints.push(h)
-	    var color = _power_to_intensity(h,max_val)*255
-	    color = "#" + (color<<16 | color<<8 | color).toString(16)
+	    var color = Math.round(_power_to_intensity(h,max_val)*255)
+	    color = "#" + (1<<25 | color<<16 | color<<8 | color).toString(16).substr(1)
 	    tlut.push(color);
 	  }
 	}
@@ -121,5 +119,6 @@ function simStep(i){
 		i=0;
 	sim = document.getElementById('sim');
 	sim.style.backgroundColor = lut[i]
+	console.log(lut[i])
 	setTimeout(function(){simStep(i+1)}, time/steps*1000);
 }
