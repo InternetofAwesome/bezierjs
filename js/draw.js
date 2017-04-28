@@ -100,12 +100,18 @@ class Draw {
       this.ctx.beginPath();
       this.ctx.arc(p.x + ox, p.y + oy, 5, 0, 2*Math.PI);
       this.ctx.stroke();
+
     }
 
   drawPoints(points, offset) {
       offset = offset || { x:0, y:0 };
       for(var p of points){
           this.drawCircle(p, 3, offset);
+          if(p.selected ===  true){
+            this.ctx.fillStyle = 'black'
+            this.ctx.fill()
+          }
+          this.ctx.stroke();
       }
     }
 

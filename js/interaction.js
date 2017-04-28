@@ -5,6 +5,7 @@ function handleInteraction(cvs, draw) {
   var points = pointsinput.value;
   var time = timeinput.value;
   var res = resinput.value;
+  var util = lg.curves[0].getUtils();
 
   lg.curves[0].update()
   updateLUT(lg)
@@ -44,7 +45,7 @@ function handleInteraction(cvs, draw) {
       for(var p of l.points){
         if(Math.abs(mx-p.x)<10 && Math.abs(my-p.y)<10) {
           moving = true;
-          mp = p;
+          mp = [p];
           cx = p.x;
           cy = p.y;
         }
@@ -81,7 +82,8 @@ function handleInteraction(cvs, draw) {
 
   cvs.addEventListener("mousemove", function(evt) {
     fix(evt);
-    var found = false;
+    var closestPoint ;
+    var dist=10
     var lx = evt.offsetX;
     var ly = evt.offsetY;
 
@@ -92,19 +94,26 @@ function handleInteraction(cvs, draw) {
         // just in case we don't have any points in a curve
         if(!c.points) continue;
         //see if were close to a point on the line
-        c.points.forEach(function(p) {
-          if(Math.abs(lx-p.x)<10 && Math.abs(ly-p.y)<10) {
-            found = found || true;
+        for (p of c.points) {
+          var tdist = util.dist({x:lx, y:ly}, p);
+          if(tdist <= dist) {
+            closestPoint = p
+            dist =tdist
+            p.selected = true;
           }
-        });
+          else 
+            p.selected = false;
+        }
       };
-      cvs.style.cursor = found ? "crosshair" : "default";
+      cvs.style.cursor = closestPoint ? "crosshair" : "default";
     }
 
     ox = evt.offsetX - mx;
     oy = evt.offsetY - my;
-    mp.x = cx + ox;
-    mp.y = cy + oy;
+    for(p of mp){
+      p.x = cx + ox;
+      p.y = cy + oy;
+    }
     draw.draw(lg)
   });
 
@@ -112,7 +121,7 @@ function handleInteraction(cvs, draw) {
     if(!moving) return;
     // console.log(curve.points.map(function(p) { return p.x+", "+p.y; }).join(", "));
     moving = false;
-    mp = false;
+    mp = [];
   });
 
   cvs.addEventListener("click", function(evt) {
