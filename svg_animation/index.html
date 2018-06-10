@@ -1,0 +1,43 @@
+<!-- <img src="./leds.svg" id="svg"> -->
+<object onload="dostuff()" width="100%" height="100%" class="svgClass" type="image/svg+xml" id="svg" data="leds.svg"></object>
+
+<script>
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function dostuff()
+{
+	console.log("asdf")
+	doc = document.getElementById('svg').getSVGDocument();
+	i=0;
+	last = null;
+	elist = []
+	while(1) 
+	{
+		e = doc.getElementById('rect' + i)
+		if (e != null)
+		{
+			elist.push(e);
+			e.style.fill = "white"
+			i++
+		}
+		else
+			break;
+	} 
+
+	colors = ['red', 'green', 'blue'];
+
+	while(1)
+	{
+		for(j=0; j<colors.length; j++)
+		{
+			for(i=0; i<elist.length; i++)
+			{
+				elist[i].style.fill = colors[j]
+				await sleep(100)
+			}
+		}
+	}
+}
+</script>
